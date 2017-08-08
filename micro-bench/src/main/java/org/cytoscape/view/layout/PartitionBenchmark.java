@@ -40,15 +40,18 @@ import org.cytoscape.model.CyNetwork;
 import org.cytoscape.model.CyNode;
 import org.cytoscape.view.model.CyNetworkView;
 import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 
 @State(Scope.Benchmark)
+@Fork(1)
 public class PartitionBenchmark {
 
 	private CyNetworkView networkView;
 	private EdgeWeighter edgeWeighter;
+	
 	
 	@Setup
 	public void createNetwork() {
@@ -80,13 +83,9 @@ public class PartitionBenchmark {
 	}
 	
 	
-    @Benchmark
-    public void testPartition() {
-    	assert networkView.getNodeViews().size() == 200 : "Expected 200 node views, got: " + networkView.getNodeViews().size();
-    	
-    	List<LayoutPartition> partitions = PartitionUtil.partition(networkView, false, edgeWeighter);
-    	
-    	assert partitions.size() == 2 : "Expected 2 partitions, got: " + partitions.size();
-    }
-
+	@Benchmark
+	public Object testPartition() {
+		return PartitionUtil.partition(networkView, false, edgeWeighter);
+	}
+	
 }
