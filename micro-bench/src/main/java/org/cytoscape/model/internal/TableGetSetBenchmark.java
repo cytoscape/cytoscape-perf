@@ -5,7 +5,6 @@ import org.cytoscape.model.CyRow;
 import org.cytoscape.model.CyTable;
 import org.cytoscape.model.TableTestSupport;
 import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
@@ -13,14 +12,13 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.infra.Blackhole;
 
 @State(Scope.Benchmark)
-@Fork(1)
 public class TableGetSetBenchmark {
 
 	private static final String COL_NAME_INTEGER = "col_Integer";
 	private static final String COL_NAME_BOOLEAN = "col_Boolean";
 	private static final String COL_NAME_STRING  = "col_String";
 	
-	@Param({"100", "1000", "10000"})
+	@Param({"100", "1000", "10000", "100000"})
 	public int tableSize;
 	
 	private CyTable table;

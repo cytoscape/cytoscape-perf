@@ -5,13 +5,19 @@ import org.cytoscape.model.CyTable;
 import org.cytoscape.model.TableTestSupport;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
 import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Threads;
+import org.openjdk.jmh.annotations.Warmup;
 
 @State(Scope.Benchmark)
+@Threads(1)
 @Fork(1)
+@Warmup(iterations=5)
+@Measurement(iterations=5)
 public class TableLookupBooleanBenchmark {
 
 	@Param({"100", "1000", "10000"})
@@ -41,10 +47,6 @@ public class TableLookupBooleanBenchmark {
 		return table.getMatchingRows(CyNetwork.SELECTED, true);
 	}
 	
-//	@Benchmark
-//	public Object testGetMatchingKeys() {
-//		return table.getMatchingKeys(CyNetwork.SELECTED, true, Long.class);
-//	}
 	
 	
 }

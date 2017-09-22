@@ -23,24 +23,34 @@ def createNodes(networkSUID, count):
     nodeSUIDs = [d['SUID'] for d in r.json()]
     return nodeSUIDs
 
-def createColumns(networkSUID, colType, count):
+def createColumns(networkSUID, colType, count, isList=False):
     colNames = [f'col_{colType}_{n}' for n in range(1, count+1)]
-    colData  = [{'name':name, 'type':colType} for name in colNames]
+    if isList:
+        colData = [{'name':name, 'type':colType, 'list':'true'} for name in colNames]
+    else:
+        colData = [{'name':name, 'type':colType} for name in colNames]
     colJson  = json.dumps(colData)
     r = requests.post(f'{baseurl}/networks/{networkSUID}/tables/defaultnode/columns', data=colJson)
     r.raise_for_status()
     return colNames
     
     
-def fillColumn(networkSUID, nodeSUIDs, colName, colType, value=None):
-    randomGenerators = {
+def fillColumn(networkSUID, nodeSUIDs, colName, colType, value=None, isList=False):
+    randGen = {
         'Integer': ( lambda: random.randint(0,999) ),
         'Long'   : ( lambda: random.randint(0,999) ),
         'Double' : ( lambda: random.randint(0,999) ),
         'Boolean': ( lambda: random.choice(['true','false']) ),
-        'String' : ( lambda: ''.join([random.choice(string.ascii_lowercase) for n in range(0,10)]) ),
+        'String' : ( lambda: ''.join([random.choice(string.ascii_lowercase) for _ in range(0,10)]) ),
     }
-    dataFun = lambda:value if value is not None else randomGenerators[colType]
+    randGenList = {
+        'Integer': ( lambda: [randGen['Integer']() for _ in range(0,5)] ),
+        'Long'   : ( lambda: [randGen['Long']()    for _ in range(0,5)] ),
+        'Double' : ( lambda: [randGen['Double']()  for _ in range(0,5)] ),
+        'Boolean': ( lambda: [randGen['Boolean']() for _ in range(0,5)] ),
+        'String' : ( lambda: [randGen['String']()  for _ in range(0,5)] ),
+    }
+    dataFun = (randGenList[colType] if isList else randGen[colType]) if value is None else lambda:value
     cellData = [{'SUID':suid, 'value':dataFun()} for suid in nodeSUIDs]
     cellJson = json.dumps(cellData)
     r = requests.put(f'{baseurl}/networks/{networkSUID}/tables/defaultnode/columns/{colName}', data=cellJson)
