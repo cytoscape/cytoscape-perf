@@ -40,11 +40,11 @@ THE POSSIBILITY OF SUCH DAMAGE.
 	</parent>
 
 	<groupId>org.cytoscape</groupId>
-	<artifactId>performance-test</artifactId>
+	<artifactId>micro-bench</artifactId>
 	<version>1.0</version>
 	<packaging>jar</packaging>
 
-	<name>JMH benchmark sample: Java</name>
+	<name>JMH benchmark</name>
 
 	<!-- This is the demo/sample template build script for building Java benchmarks 
 		with JMH. Edit as needed. -->
