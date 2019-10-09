@@ -15,6 +15,10 @@ def createEmptyNetwork(title='MyNetwork', collection='MyCollection'):
     r.raise_for_status()
     return r.json()['networkSUID']
 
+def deleteNetwork(networkSUID):
+    r = requests.delete(f'{baseurl}/networks/{networkSUID}')
+    r.raise_for_status()
+
 def createNodes(networkSUID, count):
     nodes = [str(n) for n in range(1, count+1)]
     nodesJson = json.dumps(nodes)
